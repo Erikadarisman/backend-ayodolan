@@ -3,6 +3,15 @@ const isempty = require("lodash.isempty");
 const conn = require("../Connection/connect");
 const response = require("../response/response");
 
+
+const dataEmpty = () => {
+  res
+  .status(400)
+  .send({
+      message: "Data can't be empty"
+  })
+}
+
 exports.showAll = (req, res) => {
   conn.query("select * from tb_user", (error, rows) => {
     if (error) {
@@ -58,5 +67,23 @@ exports.register = (req, res) => {
         }
       }
     );
+  }
+};
+
+exports.delete = (req, res) => {
+  let id = req.params.id
+  if (!id) {
+    dataEmpty()
+  } else {
+    conn.query(`delete from tb_user where user_id = ${id}`,(error, rows)=>{
+      if (error) {
+        console.log(error);
+        
+      } else {
+        res.send({
+          message:"Data Has Been Delete"
+      })
+      }
+    })
   }
 };
