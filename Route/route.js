@@ -8,5 +8,6 @@ module.exports = function(apps) {
 
   const users = require("../Controller/UserController");
   apps.get("/users", users.showAll);
+  apps.post("/users", users.register);
 
 };
