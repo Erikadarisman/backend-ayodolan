@@ -1,12 +1,10 @@
-"use strict";
+'use strict'
 
-module.exports = function(apps) {
-  const controller = require("../Controller/controller");
-  apps.get("/", controller.hello);
-
-
-
-  const users = require("../Controller/UserController");
-  apps.get("/users", users.showAll);
-
-};
+module.exports = function(apps){
+    //======================================
+    //IMPORT CONTROLLER NAME
+    const controler1 = require('../Controller/Authcontroller')
+    apps.get('/login',controler1.login)
+    apps.post('/change/:id', controler1.changePwd)
+    apps.get('/mailer', controler1.sendMail)
+}
