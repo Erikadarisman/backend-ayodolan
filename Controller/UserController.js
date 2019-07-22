@@ -21,6 +21,16 @@ exports.showAll = (req, res) => {
     }
   });
 };
+exports.showById = (req, res) => {
+  let id = req.params.id;
+  conn.query(`select * from tb_user where user_id = ${id}`, (error, rows) => {
+    if (error) {
+      console.log(error);
+    } else {
+      response.fulfield(rows, res);
+    }
+  });
+};
 
 exports.update = (req, res) => {
   let id = req.params.id;
