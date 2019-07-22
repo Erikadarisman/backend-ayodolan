@@ -1,10 +1,14 @@
 "use strict";
+
+require("dotenv/config");
 const isempty = require("lodash.isempty");
 const conn = require("../Connection/connect");
 const response = require("../response/response");
 
 const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(7);
+
+const cloudinary = require('cloudinary')
 
 const dataEmpty = () => {
   res.status(400).send({
@@ -68,13 +72,31 @@ exports.update = (req, res) => {
   }
 };
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
+  let path = req.file.path;
+  let getUrl = async req => {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+
+    let data;
+    await cloudinary.uploader.upload(path, result => {
+      const fs = require("fs");
+      fs.unlinkSync(path);
+      data = result.url;
+    });
+    return data;
+  };
+
+  let image = await getUrl();
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
   let gender = req.body.gender;
   let no_phone = req.body.no_phone;
-  let image = req.body.image;
+  // let image = req.body.image;
   if (!username && !email && !password && !gender && !no_phone) {
     res.status(400).send({
       message: "Data can't be empty"
