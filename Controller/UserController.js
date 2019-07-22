@@ -3,6 +3,9 @@ const isempty = require("lodash.isempty");
 const conn = require("../Connection/connect");
 const response = require("../response/response");
 
+const bcrypt = require('bcrypt');
+const salt = bcrypt.genSaltSync(7);
+
 
 const dataEmpty = () => {
   res
@@ -41,9 +44,10 @@ exports.register = (req, res) => {
             message: "Email has been used"
           });
         } else {
+          let encryptPassword = bcrypt.hashSync(password, salt);
           conn.query(
             "insert into tb_user set username=?, email=?, password=?, gender=?, no_phone=?, image=?",
-            [username, email, password, gender, no_phone, image],
+            [username, email, encryptPassword, gender, no_phone, image],
             (error, rows) => {
               if (error) {
                 console.log("error 1");
