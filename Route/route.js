@@ -9,6 +9,7 @@ module.exports = function(apps) {
   const users = require("../Controller/UserController");
   apps.get("/users", users.showAll);
   apps.post("/users", users.register);
+  apps.patch("/users/:id", users.update);
   apps.delete("/users/:id", users.delete);
 
 };
