@@ -1,11 +1,12 @@
+
 'use strict'
-    //======================================
-    //IMPORT CONTROLLER NAME
-    
+
 module.exports = function(apps) {
-  const controller = require("../Controller/controller");
   const controler1 = require('../Controller/Authcontroller')
-  apps.get("/", controller.hello);
+  const controller = require("../Controller/controller");
+
+  const auth = require('../middleware/authToken')
+
 
   //image
   const multer = require("multer");
@@ -28,8 +29,10 @@ module.exports = function(apps) {
   apps.get("/users/:id", users.showById);
   apps.patch("/users/:id", users.update);
   apps.delete("/users/:id", users.delete);
- 
+
   apps.get('/login',controler1.login)
   apps.post('/change/:id', controler1.changePwd)
   apps.get('/mailer', controler1.sendMail)
+  apps.get("/", auth , controller.hello);
+
 };

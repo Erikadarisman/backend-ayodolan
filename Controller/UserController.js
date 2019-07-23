@@ -91,13 +91,14 @@ exports.register = async (req, res) => {
   };
 
   let image = await getUrl();
+  let name = req.body.name;
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
   let gender = req.body.gender;
   let no_phone = req.body.no_phone;
   // let image = req.body.image;
-  if (!username && !email && !password && !gender && !no_phone) {
+  if (!name && !username && !email && !password && !gender && !no_phone) {
     res.status(400).send({
       message: "Data can't be empty"
     });
@@ -120,8 +121,8 @@ exports.register = async (req, res) => {
               } else {
                 let encryptPassword = bcrypt.hashSync(password, salt);
                 conn.query(
-                  "insert into tb_user set username=?, email=?, password=?, gender=?, no_phone=?, image=?",
-                  [username, email, encryptPassword, gender, no_phone, image],
+                  "insert into tb_user set name=?, username=?, email=?, password=?, gender=?, no_phone=?, image=?",
+                  [name, username, email, encryptPassword, gender, no_phone, image],
                   (error, rows) => {
                     if (error) {
                       console.log("error 1");
