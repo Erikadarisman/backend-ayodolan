@@ -18,7 +18,9 @@ const dataEmpty = () => {
 exports.showAll = (req, res) => {
   conn.query("select * from tb_user", (error, rows) => {
     if (error) {
-      console.log(error);
+      res.status(400).json({
+        message:error
+    })
     } else {
       response.fulfield(rows, res);
     }
@@ -29,7 +31,9 @@ exports.showById = (req, res) => {
   let id = req.params.id;
   conn.query(`select * from tb_user where user_id = ${id}`, (error, rows) => {
     if (error) {
-      console.log(error);
+      res.status(400).json({
+        message:error
+      })
     } else {
       response.fulfield(rows, res);
     }
@@ -131,17 +135,17 @@ exports.register = async (req, res) => {
       `select * from tb_user where email='${email}'`,
       (error, rows) => {
         if (rows.length > 0) {
-          res.send({
-            message: "Email has been used"
-          });
+          res.status(400).json({
+            message:'email has been taked'
+          })
         } else {
           conn.query(
             `select * from tb_user where username='${username}'`,
             (error, rows) => {
               if (rows.length > 0) {
-                res.send({
-                  message: "Username has been used"
-                });
+                res.status(400).json({
+                  message:'username has been taked'
+                })
               } else {
                 let encryptPassword = bcrypt.hashSync(password, salt);
                 conn.query(
@@ -149,13 +153,17 @@ exports.register = async (req, res) => {
                   [name, username, email, encryptPassword, gender, no_phone, image],
                   (error, rows) => {
                     if (error) {
-                      console.log("error 1");
+                      res.status(400).json({
+                        message:error
+                      })
                     } else {
                       conn.query(
                         "select * from tb_user order by user_id desc limit 1",
                         (error, row) => {
                           if (error) {
-                            console.log("error 2");
+                            res.status(400).json({
+                              message:error
+                           })
                           } else {
                             res.send({
                               status: 200,
@@ -183,7 +191,9 @@ exports.delete = (req, res) => {
   } else {
     conn.query(`delete from tb_user where user_id = ${id}`, (error, rows) => {
       if (error) {
-        console.log(error);
+        res.status(400).json({
+          message:error
+       })
       } else {
         res.send({
           message: "Data Has Been Delete"

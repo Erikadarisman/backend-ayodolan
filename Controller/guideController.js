@@ -21,9 +21,9 @@ exports.login = (req,res) =>{
 
   conn.query(sql, async (err, rows) =>{
       if (err) {
-          res.send({
-              message:err
-          })
+        res.status(400).json({
+            message:err
+        })
       }else{
           let email_user = ''
           let password_user = ''
@@ -43,7 +43,7 @@ exports.login = (req,res) =>{
                   token: token
               })
           }else{
-              res.send({
+              res.status(400).json({
                   message:'password salah'
               })
           }
@@ -55,7 +55,9 @@ exports.login = (req,res) =>{
 exports.showAll = (req, res) => {
   conn.query("select * from tb_guide", (error, rows) => {
     if (error) {
-      console.log(error);
+        res.status(400).json({
+            message:err
+        })
     } else {
       response.fulfield(rows, res);
     }
@@ -66,7 +68,9 @@ exports.showById = (req, res) => {
   let id = req.params.id;
   conn.query(`select * from tb_guide where id_guide = ${id}`, (error, rows) => {
     if (error) {
-      console.log(error);
+        res.status(400).json({
+            message:err
+        })
     } else {
       response.fulfield(rows, res);
     }
@@ -140,7 +144,9 @@ exports.delete = (req, res) => {
   } else {
     conn.query(`delete from tb_guide where id_guide = ${id}`, (error, rows) => {
       if (error) {
-        console.log(error);
+        res.status(400).json({
+            message:err
+        })
       } else {
         res.send({
           message: "Data Has Been Delete"
@@ -172,9 +178,9 @@ exports.sendMail = (req,res) =>{
 
   conn.query(sql, (err, rows) =>{
       if (err) {
-          res.send({
-              message: err
-          })
+            res.status(400).json({
+                message:err
+            })
       }else{
           let email = ''
           let data = rows
@@ -185,9 +191,11 @@ exports.sendMail = (req,res) =>{
           if (checkEmail === email) {
               transporter.sendMail(mailOptions, function (error, info) {
                   if (error) {
-                      console.log(error);
+                    res.status(400).json({
+                        message:error
+                    })
                   } else {
-                      console.log(random)
+                      
                       console.log('Email sent: ' + info.response);
                       res.send({
                           kode: random
@@ -195,9 +203,9 @@ exports.sendMail = (req,res) =>{
                   }
               });
           }else{
-              res.send({
-                  message:'email wrong!'
-              })
+            res.status(400).json({
+                message:'email wring'
+            })
           } 
       }
   })
@@ -211,9 +219,9 @@ exports.changePwd = (req,res) =>{
       let sql = `update tb_guide set password = ${encryptPassword} where user_id = ${id}` 
       conn.query(sql, (err, rows)=>{
           if (err) {
-              res.send({
-                  message:err
-              })
+                res.status(400).json({
+                    message:err
+                })
           }else{
               res.send({
                   message: 'Change password sukses'
@@ -221,9 +229,9 @@ exports.changePwd = (req,res) =>{
           }
       })
   }else{
-      res.send({
-          message: 'password not same'
-      })
+    res.status(400).json({
+        message:'password not same'
+    })
   }
 
 }
