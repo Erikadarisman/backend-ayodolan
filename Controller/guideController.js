@@ -7,6 +7,7 @@ const response = require("../response/response");
 const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(7);
 const cloudinary = require('cloudinary');
+const jwt = require('jsonwebtoken')
 
 
 const dataEmpty = () => {
