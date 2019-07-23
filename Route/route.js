@@ -9,6 +9,8 @@ module.exports = function(apps) {
   const auth = require('../middleware/authToken');
   const destinasi = require('../Controller/destinasiController');
   const guide = require('../Controller/guideController');
+  const order = require('../Controller/orderController')
+  const paket = require('../Controller/paketControlller')
 
 
 
@@ -46,9 +48,10 @@ module.exports = function(apps) {
   apps.post('/guide/change/:id', guide.changePwd)
   apps.get('/guide/mailer', guide.sendMail)
 
-  apps.get("/guide", guide.showAll);
-  apps.get("/guide/:id", guide.showById);
-  apps.patch("/guide/:id", upload.single('image') ,guide.update);
-  apps.delete("/guide/:id", guide.delete);
+  
+  apps.get('/order', order.getOrder)
+  apps.post('/order', order.postOrder)
+
+  apps.get('/paket', paket.getPaket)
 
 };
