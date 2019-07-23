@@ -27,7 +27,7 @@ exports.login = (req,res) =>{
 
     conn.query(sql, async (err, rows) =>{
         if (err) {
-            res.send({
+            res.status(400).json({
                 message:err
             })
         }else{
@@ -49,7 +49,7 @@ exports.login = (req,res) =>{
                     token: token
                 })
             }else{
-                res.send({
+                res.status(400).json({
                     message:'password salah'
                 })
             }
@@ -102,7 +102,7 @@ exports.sendMail = (req,res) =>{
                     }
                 });
             }else{
-                res.send({
+                res.status(400).json({
                     message:'email wrong!'
                 })
             } 
@@ -118,17 +118,18 @@ exports.changePwd = (req,res) =>{
         let sql = `update tb_user set password = ${encryptPassword} where user_id = ${id}` 
         conn.query(sql, (err, rows)=>{
             if (err) {
-                res.send({
+                res.status(400).send({
                     message:err
                 })
             }else{
                 res.send({
+                    status:200,
                     message: 'Change password sukses'
                 })
             }
         })
     }else{
-        res.send({
+        res.status(400).json({
             message: 'password not same'
         })
     }

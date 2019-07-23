@@ -8,7 +8,7 @@ exports.postOrder = (req,res) =>{
     let sql = `insert into tb_order set id_user=?, id_guide=?, id_destination=?, date=?, status=?`
     conn.query(sql,[id_user,id_guide, id_destination,date,status], (err, rows)=>{
         if (err) {
-            res.send({
+            res.status(400).json({
                 message:err
             })
         }else{
@@ -33,8 +33,8 @@ exports.getOrder = (req,res) =>{
 
     conn.query(sql, (err, rows) =>{
         if (err) {
-            res.send({
-                message: err
+            res.status(400).json({
+                message:err
             })
         }else{
             res.send({
