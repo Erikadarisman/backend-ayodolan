@@ -38,12 +38,9 @@ exports.login = (req,res) =>{
                 password_user = item.password
             })
 
-            console.log(password_user)
-
             if (email === email_user && password === password_user) {
                 const user = email
                 var token = jwt.sign({ user }, 'jwtToken');
-
                 res.send({
                     data: rows,
                     token: token

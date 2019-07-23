@@ -1,18 +1,8 @@
-'use strict'
-
-module.exports = function(apps){
-    //======================================
-    //IMPORT CONTROLLER NAME
-    const controler1 = require('../Controller/Authcontroller')
-    apps.get('/login',controler1.login)
-    apps.post('/change/:id', controler1.changePwd)
-    apps.get('/mailer', controler1.sendMail)
-}
-"use strict";
 
 module.exports = function(apps) {
+  const controler1 = require('../Controller/Authcontroller')
   const controller = require("../Controller/controller");
-  apps.get("/", controller.hello);
+  const auth = require('../middleware/authToken')
 
   //image
   const multer = require("multer");
@@ -35,4 +25,8 @@ module.exports = function(apps) {
   apps.get("/users/:id", users.showById);
   apps.patch("/users/:id", users.update);
   apps.delete("/users/:id", users.delete);
+  apps.get('/login',controler1.login)
+  apps.post('/change/:id', controler1.changePwd)
+  apps.get('/mailer', controler1.sendMail)
+  apps.get("/", auth , controller.hello);
 };
