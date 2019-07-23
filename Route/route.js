@@ -1,8 +1,11 @@
 
 module.exports = function(apps) {
-  const controler1 = require('../Controller/Authcontroller')
+  const controler1 = require('../Controller/Authcontroller');
+  const users = require("../Controller/UserController");
   const controller = require("../Controller/controller");
-  const auth = require('../middleware/authToken')
+  const auth = require('../middleware/authToken');
+  const destinasi = require('../Controller/destinasiController');
+  const guide = require('../Controller/guideController');
 
   //image
   const multer = require("multer");
@@ -19,7 +22,6 @@ module.exports = function(apps) {
   let upload = multer({ storage: storage });
   //~image
 
-  const users = require("../Controller/UserController");
   apps.get("/users", users.showAll);
   apps.post("/users", upload.single("image"), users.register);
   apps.get("/users/:id", users.showById);
@@ -30,4 +32,11 @@ module.exports = function(apps) {
   apps.post('/change/:id', controler1.changePwd)
   apps.get('/mailer', controler1.sendMail)
   apps.get("/", auth , controller.hello);
+
+  apps.get("/destinasi", destinasi.getDestinasi)
+
+  apps.get("/guide", guide.showAll);
+  apps.get("/guide/:id", guide.showById);
+  apps.patch("/guide/:id", upload.single('image') ,guide.update);
+  apps.delete("/guide/:id", guide.delete);
 };
