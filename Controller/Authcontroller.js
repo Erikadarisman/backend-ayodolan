@@ -39,12 +39,9 @@ exports.login = (req,res) =>{
                 email_user = item.email,
                 password_user = item.password
             })
-
-
+          
             let decrypt = await bcrypt.compare(password, password_user)
-
             if (decrypt) {
-
                 const user = email
                 var token = jwt.sign({ user }, 'jwtToken');
                 res.send({
