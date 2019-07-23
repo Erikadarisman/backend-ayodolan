@@ -33,7 +33,7 @@ module.exports = function(apps) {
   apps.patch("/users/:id", upload.single('image') ,users.update);
   apps.delete("/users/:id", users.delete);
 
-  apps.get('/login',controler1.login)
+  apps.post('/login',controler1.login)
   apps.post('/change/:id', controler1.changePwd)
   apps.get('/mailer', controler1.sendMail)
   apps.get("/", auth , controller.hello);
