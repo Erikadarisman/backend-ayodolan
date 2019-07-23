@@ -41,6 +41,11 @@ module.exports = function(apps) {
 
   apps.get("/destinasi", destinasi.getDestinasi)
 
+
+  apps.post('/guide/login',guide.login);
+  apps.post('/guide/change/:id', guide.changePwd)
+  apps.get('/guide/mailer', guide.sendMail)
+
   apps.get("/guide", guide.showAll);
   apps.get("/guide/:id", guide.showById);
   apps.patch("/guide/:id", upload.single('image') ,guide.update);
