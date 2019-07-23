@@ -4,6 +4,8 @@ const conn = require('../Connection/connect')
 const response = require('../response/response')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
+const bcrypt = require('bcrypt')
+const salt = bcrypt.genSaltSync(7);
 
 let random = ''
 let email = ''
@@ -23,7 +25,7 @@ exports.login = (req,res) =>{
     let {email, password} = req.body
     let sql = `select * from tb_user where email = '${email}'`
 
-    conn.query(sql, (err, rows) =>{
+    conn.query(sql, async (err, rows) =>{
         if (err) {
             res.send({
                 message:err
@@ -38,7 +40,11 @@ exports.login = (req,res) =>{
                 password_user = item.password
             })
 
-            if (email === email_user && password === password_user) {
+
+            let decrypt = await bcrypt.compare(password, password_user)
+
+            if (decrypt) {
+
                 const user = email
                 var token = jwt.sign({ user }, 'jwtToken');
                 res.send({
@@ -110,9 +116,9 @@ exports.sendMail = (req,res) =>{
 exports.changePwd = (req,res) =>{
     let id = req.params.id
     let {email, password, newPassword} = req.body
-    let sql = `update tb_user set password = ${newPassword} where user_id = ${id}` 
-
     if( password === newPassword){
+        let encryptPassword = bcrypt.hashSync(password, salt);
+        let sql = `update tb_user set password = ${encryptPassword} where user_id = ${id}` 
         conn.query(sql, (err, rows)=>{
             if (err) {
                 res.send({
