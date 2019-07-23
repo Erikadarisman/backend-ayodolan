@@ -27,7 +27,7 @@ module.exports = function(apps) {
   apps.get("/users", users.showAll);
   apps.post("/users", upload.single("image"), users.register);
   apps.get("/users/:id", users.showById);
-  apps.patch("/users/:id", users.update);
+  apps.patch("/users/:id", upload.single('image') ,users.update);
   apps.delete("/users/:id", users.delete);
 
   apps.get('/login',controler1.login)
