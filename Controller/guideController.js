@@ -7,8 +7,22 @@ const response = require("../response/response");
 const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(7);
 const cloudinary = require('cloudinary');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
+let random = ''
+let email = ''
+let id = ''
+function acak() {
+    random = ''
+    let b = '0123456789';
+    let c = 6;
+    let d = b.length;
+    
+    for (let i = 0; i < c; i++) {
+        random += b.charAt(Math.floor(Math.random() * d));
+    }
+}
 
 const dataEmpty = () => {
   res.status(400).send({
@@ -120,7 +134,7 @@ exports.update = async(req, res) => {
           console.log(error);
         } else {
           conn.query(
-            `select * from tb_guide where user_id = ${id}`,
+            `select * from tb_guide where id_guide = ${id}`,
             (error, row) => {
               if (error) {
                 console.log(error);
@@ -184,11 +198,13 @@ exports.sendMail = (req,res) =>{
             })
       }else{
           let email = ''
+          let id = ''
           let data = rows
           data.map((item) =>{
               email = item.email
+              id = item.id_guide
           })
-
+          console.log(id)
           if (checkEmail === email) {
               transporter.sendMail(mailOptions, function (error, info) {
                   if (error) {
@@ -199,13 +215,14 @@ exports.sendMail = (req,res) =>{
                       
                       console.log('Email sent: ' + info.response);
                       res.send({
-                          kode: random
+                          kode: random,
+                          id: id
                       })
                   }
               });
           }else{
             res.status(400).json({
-                message:'email wring'
+                message:'email wrong'
             })
           } 
       }
@@ -217,7 +234,7 @@ exports.changePwd = (req,res) =>{
   let {email, password, newPassword} = req.body
   if( password === newPassword){
       let encryptPassword = bcrypt.hashSync(password, salt);
-      let sql = `update tb_guide set password = ${encryptPassword} where user_id = ${id}` 
+      let sql = `update tb_guide set password = '${encryptPassword}' where id_guide = ${id}` 
       conn.query(sql, (err, rows)=>{
           if (err) {
                 res.status(400).json({

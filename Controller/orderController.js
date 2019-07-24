@@ -2,6 +2,11 @@
 
 const conn = require('../Connection/connect')
 const isEmty = require('lodash.isempty')
+const redis = require('redis')
+const client = redis.createClient({
+    url: 'redis://redis-16054.c16.us-east-1-2.ec2.cloud.redislabs.com:16054',
+    auth_pass: 'qg8BcWioB7XiUdPxN3FZX1CqzAv8q2rf'
+})
 
 exports.postOrder = (req,res) =>{
     let {id_user, id_guide,id_destination, date, status} = req.body
@@ -12,6 +17,7 @@ exports.postOrder = (req,res) =>{
                 message:err
             })
         }else{
+            client.del(redisKey)
             res.send({
                 message:'data has been saved'
             })
@@ -31,14 +37,25 @@ exports.getOrder = (req,res) =>{
         }
     }
 
-    conn.query(sql, (err, rows) =>{
-        if (err) {
-            res.status(400).json({
-                message:err
+    let redisKey = 'order:rows'
+
+    return client.get(redisKey, (err, rows)=>{
+        if (rows) {
+            res.send({
+                data: JSON.parse(rows)
             })
         }else{
-            res.send({
-                data: rows
+            conn.query(sql, (err, rows) =>{
+                if (err) {
+                    res.status(400).json({
+                        message:err
+                    })
+                }else{
+                    client.setex(redisKey, 3600, JSON.stringify(rows))
+                    res.send({
+                        data: rows
+                    })
+                }
             })
         }
     })

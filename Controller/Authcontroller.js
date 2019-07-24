@@ -84,9 +84,12 @@ exports.sendMail = (req,res) =>{
             })
         }else{
             let email = ''
+            let id = ''
             let data = rows
             data.map((item) =>{
                 email = item.email
+                id = item.user_id
+
             })
 
             if (checkEmail === email) {
@@ -97,7 +100,8 @@ exports.sendMail = (req,res) =>{
                         console.log(random)
                         console.log('Email sent: ' + info.response);
                         res.send({
-                            kode: random
+                            kode: random,
+                            id : id
                         })
                     }
                 });
@@ -115,7 +119,7 @@ exports.changePwd = (req,res) =>{
     let {email, password, newPassword} = req.body
     if( password === newPassword){
         let encryptPassword = bcrypt.hashSync(password, salt);
-        let sql = `update tb_user set password = ${encryptPassword} where user_id = ${id}` 
+        let sql = `update tb_user set password = '${encryptPassword}' where user_id = ${id}` 
         conn.query(sql, (err, rows)=>{
             if (err) {
                 res.status(400).send({

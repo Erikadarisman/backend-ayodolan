@@ -37,21 +37,24 @@ module.exports = function(apps) {
 
   apps.post('/login',controler1.login)
   apps.post('/change/:id', controler1.changePwd)
-  apps.get('/mailer', controler1.sendMail)
+  apps.post('/mailer', controler1.sendMail)
   apps.get("/", auth , controller.hello);
 
 
   apps.get("/destinasi", destinasi.getDestinasi)
+  apps.get('/populardes', destinasi.popularDestination)
 
 
   apps.post('/guide/login',guide.login);
   apps.post('/guide/change/:id', guide.changePwd)
-  apps.get('/guide/mailer', guide.sendMail)
+  apps.post('/guide/mailer', guide.sendMail)
+  apps.get('/guide/:id', guide.showById)
 
   
   apps.get('/order', order.getOrder)
   apps.post('/order', order.postOrder)
 
   apps.get('/paket', paket.getPaket)
+  apps.get('/detailpaket', paket.detailPaket)
 
 };
