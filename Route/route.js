@@ -12,6 +12,7 @@ module.exports = function(apps) {
   const order = require('../Controller/orderController')
   const paket = require('../Controller/paketControlller')
 
+ 
 
 
   //image
@@ -40,6 +41,7 @@ module.exports = function(apps) {
   apps.post('/mailer', controler1.sendMail)
   apps.get("/", auth , controller.hello);
 
+  apps.post('/singleorder/notif', paket.notification);
 
   apps.get("/destinasi", destinasi.getDestinasi)
   apps.get('/populardes', destinasi.popularDestination)
@@ -51,10 +53,21 @@ module.exports = function(apps) {
   apps.get('/guide/:id', guide.showById)
 
   
-  apps.get('/order', order.getOrder)
+  apps.get('/order/:id_user', order.getOrder)
   apps.post('/order', order.postOrder)
+  apps.post('/transaksi', order.postTransaksi)
+  apps.get('/transaksi', order.getTransaksi)
+
+  apps.get('/transaksiByid', order.getTransaksiByIdTransaksi)
+
+  apps.patch('/updateStatusOrder', order.updateStatusOrder)
+
 
   apps.get('/paket', paket.getPaket)
   apps.get('/detailpaket', paket.detailPaket)
 
+  apps.get('/historyGuide/:id_guide', order.getOrderGuide)
+
+
+  apps.get('/booking', order.postBooking)
 };
