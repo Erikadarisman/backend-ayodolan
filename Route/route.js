@@ -9,7 +9,9 @@ module.exports = function(apps) {
   const auth = require('../middleware/authToken');
   const destinasi = require('../Controller/destinasiController');
   const guide = require('../Controller/guideController');
-
+  const order = require('../Controller/orderController')
+  const paket = require('../Controller/paketControlller')
+ 
 
 
   //image
@@ -35,20 +37,36 @@ module.exports = function(apps) {
 
   apps.post('/login',controler1.login)
   apps.post('/change/:id', controler1.changePwd)
-  apps.get('/mailer', controler1.sendMail)
+  apps.post('/mailer', controler1.sendMail)
   apps.get("/", auth , controller.hello);
 
+  apps.post('/singleorder/notif', paket.notification);
 
   apps.get("/destinasi", destinasi.getDestinasi)
+  apps.get('/populardes', destinasi.popularDestination)
 
 
   apps.post('/guide/login',guide.login);
   apps.post('/guide/change/:id', guide.changePwd)
-  apps.get('/guide/mailer', guide.sendMail)
+  apps.post('/guide/mailer', guide.sendMail)
+  apps.get('/guide/:id', guide.showById)
 
-  apps.get("/guide", guide.showAll);
-  apps.get("/guide/:id", guide.showById);
-  apps.patch("/guide/:id", upload.single('image') ,guide.update);
-  apps.delete("/guide/:id", guide.delete);
+  
+  apps.get('/order/:id_user', order.getOrder)
+  apps.post('/order', order.postOrder)
+  apps.post('/transaksi', order.postTransaksi)
+  apps.get('/transaksi', order.getTransaksi)
 
+  apps.get('/transaksiByid', order.getTransaksiByIdTransaksi)
+
+  apps.patch('/updateStatusOrder', order.updateStatusOrder)
+
+
+  apps.get('/paket', paket.getPaket)
+  apps.get('/detailpaket', paket.detailPaket)
+
+  apps.get('/historyGuide/:id_guide', order.getOrderGuide)
+
+
+  apps.get('/booking', order.postBooking)
 };

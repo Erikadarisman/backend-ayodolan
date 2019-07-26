@@ -27,7 +27,7 @@ exports.login = (req,res) =>{
 
     conn.query(sql, async (err, rows) =>{
         if (err) {
-            res.send({
+            res.status(400).json({
                 message:err
             })
         }else{
@@ -49,7 +49,7 @@ exports.login = (req,res) =>{
                     token: token
                 })
             }else{
-                res.send({
+                res.status(400).json({
                     message:'password salah'
                 })
             }
@@ -84,9 +84,12 @@ exports.sendMail = (req,res) =>{
             })
         }else{
             let email = ''
+            let id = ''
             let data = rows
             data.map((item) =>{
                 email = item.email
+                id = item.user_id
+
             })
 
             if (checkEmail === email) {
@@ -97,12 +100,13 @@ exports.sendMail = (req,res) =>{
                         console.log(random)
                         console.log('Email sent: ' + info.response);
                         res.send({
-                            kode: random
+                            kode: random,
+                            id : id
                         })
                     }
                 });
             }else{
-                res.send({
+                res.status(400).json({
                     message:'email wrong!'
                 })
             } 
@@ -115,20 +119,21 @@ exports.changePwd = (req,res) =>{
     let {email, password, newPassword} = req.body
     if( password === newPassword){
         let encryptPassword = bcrypt.hashSync(password, salt);
-        let sql = `update tb_user set password = ${encryptPassword} where user_id = ${id}` 
+        let sql = `update tb_user set password = '${encryptPassword}' where user_id = ${id}` 
         conn.query(sql, (err, rows)=>{
             if (err) {
-                res.send({
+                res.status(400).send({
                     message:err
                 })
             }else{
                 res.send({
+                    status:200,
                     message: 'Change password sukses'
                 })
             }
         })
     }else{
-        res.send({
+        res.status(400).json({
             message: 'password not same'
         })
     }

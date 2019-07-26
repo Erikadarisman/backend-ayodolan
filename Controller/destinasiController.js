@@ -1,40 +1,70 @@
 'use strict'
 
 const conn = require('../Connection/connect')
+const isEmpty = require('lodash.isempty')
+const redis = require('redis')
+const client = redis.createClient({
+    url: 'redis://redis-16054.c16.us-east-1-2.ec2.cloud.redislabs.com:16054',
+    auth_pass: 'qg8BcWioB7XiUdPxN3FZX1CqzAv8q2rf'
+})
 
 exports.getDestinasi = (req,res) =>{
-    let sql = 'SELECT DISTINCT tb_destination.id_destination FROM tb_foto_destination join tb_destination on tb_foto_destination.id_destination = tb_destination.id_destination'
-    let sqldef = 'SELECT * tb_destination.id_destination FROM tb_foto_destination join tb_destination on tb_foto_destination.id_destination = tb_destination.id_destination'
-    conn.query(sql, (err, rows) =>{
-        if (err) {
+    let limit = req.query.limit
+    let sql = 'SELECT * FROM tb_destination order by id_destination '
+
+    if (!isEmpty(limit)) {
+        sql += `limit ${limit}`
+    }
+
+    let redisKey = 'destinasi:rows'
+    return client.get(redisKey, (err, rows) =>{
+        if (rows) {
             res.send({
-                message: err
+                data:JSON.parse(rows)
             })
+            client.del(redisKey)
         }else{
-            let val = []
-            let i = 0
-            let data = rows 
-
-            data.map((item) =>{
-                val[i] = item.id_destination
-                i++
-            })
-
-            conn.query(sqldef, (err, row) =>{
+            conn.query(sql, (err, rows) =>{
                 if (err) {
-                    res.send({
+                    res.status(400).json({
                         message:err
                     })
                 }else{
-                    let datas = row
-                    let j = 0
-                    datas.map((items) =>{
-                        if (items.id_destination == val[j]) {
-                            
-                        }
+                    client.setex(redisKey, 3600, JSON.stringify(rows))
+                    res.send({
+                        data:rows
                     })
                 }
             })
         }
     })
+}
+
+exports.popularDestination = (req,res) =>{
+    let sql = 'SELECT * FROM `tb_order` left join tb_destination on tb_order.id_destination = tb_destination.id_destination order by id_order'
+
+    let redisKey = 'pupular: rows'
+
+    return client.get(redisKey, (err, rows) =>{
+        if (rows) {
+            res.send({
+                data:JSON.parse(rows)
+            })
+        }else{
+            conn.query(sql, (err, rows) =>{
+                if (err) {
+                    res.status(400).json({
+                        message:err
+                    })
+                }else{
+                    client.setex(redisKey, 3600, JSON.stringify(rows))
+                    res.send({
+                        data:rows
+                    })
+                }
+            })
+        }
+    })
+
+    
 }
