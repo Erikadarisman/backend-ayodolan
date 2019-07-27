@@ -27,3 +27,46 @@ This is my repository containing a Rest Full API clone Bhineka for backend app c
 ## Note
 * The database used is MySQL DB which is already remote to the server [Remote SQL](https://remotemysql.com/)
 
+## Contributors
+<center>
+  <table>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/mhdrare">
+          <img width="100" src="https://avatars3.githubusercontent.com/u/38139389?s=400&v=4" alt="M Faisal Akbar"><br/>
+          <sub><b>M Faisal Akbar</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/hrs234">
+          <img width="100" src="https://avatars3.githubusercontent.com/u/50226393?s=400&v=4" alt="Harris Santoso"><br/>
+          <sub><b>Harris Santoso</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/kevinmartinda">
+          <img width="100" src="https://avatars3.githubusercontent.com/u/29590591?s=400&v=4" alt="Muhammad Robai"><br/>
+          <sub><b>Muhammad Robai</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/mhdrare">
+          <img width="100" src="https://avatars1.githubusercontent.com/u/51024270?s=460&v=4" alt="M Aftarroziq"><br/>
+          <sub><b>M Aftarroziq</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/DanyAdhi">
+          <img width="100" src="https://avatars1.githubusercontent.com/u/45444857?s=400&v=4" alt="danyadhiprabowo"><br/>
+          <sub><b>Dany Adhi Prabowo</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/DanyAdhi">
+          <img width="100" src="https://avatars1.githubusercontent.com/u/52651194?s=400&v=4" alt="Erik Kadarisman"><br/>
+          <sub><b>Erik Kadarisman</b></sub>
+        </a>
+      </td>
+    </tr>
+  </table>
+</center>
